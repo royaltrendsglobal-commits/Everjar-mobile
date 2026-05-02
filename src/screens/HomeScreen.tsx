@@ -5,6 +5,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { Note } from '../types';
 import { loadNotes } from '../storage';
+import NoteCard from '../components/NoteCard';
 
 type RootStackParamList = {
   Home: undefined;
@@ -23,21 +24,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
   const daysCollected = notes.length;
   const progress = Math.min(daysCollected / 365 * 100, 100);
 
-  const renderNote = ({ item }: { item: Note }) => {
-    const today = new Date().toISOString().split('T')[0];
-    const canView = !item.isLocked || (item.unlockDate && item.unlockDate <= today);
-    return (
-      <View style={styles.noteItem}>
-        <Text style={styles.noteDate}>{new Date(item.date).toDateString()}</Text>
-        {item.isLocked && <Text style={styles.lockedText}>🔒 Locked until {item.unlockDate}</Text>}
-        {canView ? (
-          <Text style={styles.noteText}>{item.text}</Text>
-        ) : (
-          <Text style={styles.noteText}>This note is locked. Come back later!</Text>
-        )}
-      </View>
-    );
-  };
+  const renderNote = ({ item }: { item: Note }) => <NoteCard note={item} />;
 
   return (
     <View style={styles.container}>
